@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Rental {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rental_id")
     @Setter(AccessLevel.NONE)
     Integer id;
@@ -27,12 +27,12 @@ public class Rental {
     @NonNull
     LocalDateTime rentalDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "inventory_id", nullable = false)
     @NonNull
     Inventory inventory;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "customer_id", nullable = false)
     @NonNull
     Customer customer;
@@ -40,7 +40,7 @@ public class Rental {
     @Column(name = "return_date")
     LocalDateTime returnDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "staff_id", nullable = false)
     @NonNull
     Staff staff;

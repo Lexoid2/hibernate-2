@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Actor {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "actor_id")
     @Setter(AccessLevel.NONE)
     Integer id;
@@ -31,7 +31,8 @@ public class Actor {
     @NonNull
     String lastName;
 
-    @ManyToMany(mappedBy = "actors")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "actors")
     List<Film> films;
 
     @Column(name = "last_update", nullable = false)

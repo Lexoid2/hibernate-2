@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
     @Setter(AccessLevel.NONE)
     Integer id;
@@ -34,18 +34,21 @@ public class Address {
     @NonNull
     String district;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "city_id", nullable = false)
     @NonNull
     City city;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "address")
     List<Customer> customers;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "address")
     List<Store> stores;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "address")
     List<Staff> staffList;
 
     @Column(name = "postal_code", length = 10)

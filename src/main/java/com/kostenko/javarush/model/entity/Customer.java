@@ -18,12 +18,12 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     @Setter(AccessLevel.NONE)
     Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "store_id", nullable = false)
     @NonNull
     Store store;
@@ -39,15 +39,17 @@ public class Customer {
     @Column(length = 50)
     String email;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "address_id", nullable = false)
     @NonNull
     Address address;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "customer")
     List<Payment> payments;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "customer")
     List<Rental> rentals;
 
     @Column(name = "active", nullable = false)

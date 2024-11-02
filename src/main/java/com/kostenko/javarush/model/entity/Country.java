@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Country {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "country_id")
     @Setter(AccessLevel.NONE)
     Integer id;
@@ -27,7 +27,8 @@ public class Country {
     @NonNull
     String country;
 
-    @OneToMany(mappedBy = "country")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "country")
     List<City> cities;
 
     @Column(name = "last_update", nullable = false)

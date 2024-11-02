@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     @Setter(AccessLevel.NONE)
     Short id;
@@ -27,7 +27,8 @@ public class Category {
     @NonNull
     String name;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "categories")
     List<Film> films;
 
     @Column(name = "last_update", nullable = false)

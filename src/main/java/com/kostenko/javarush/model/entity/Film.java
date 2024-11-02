@@ -24,43 +24,43 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
     @Setter(AccessLevel.NONE)
     Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @MapsId
-    @JoinColumn(name = "film_id")
+    @Embedded
+    @NonNull
     Text text;
 
     @Column(name = "release_year")
     Year releaseYear;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "language_id", nullable = false)
     @NonNull
     Language language;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "original_language_id")
     Language originalLanguage;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "film_actor",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     List<Actor> actors;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "film_category",
             joinColumns = @JoinColumn(name = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     List<Category> categories;
 
-    @OneToMany(mappedBy = "film")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "film")
     List<Inventory> inventories;
 
     @Column(name = "rental_duration", nullable = false)

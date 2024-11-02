@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Language {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")
     @Setter(AccessLevel.NONE)
     Short id;
@@ -27,10 +27,12 @@ public class Language {
     @NonNull
     String name;
 
-    @OneToMany(mappedBy = "language")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "language")
     List<Film> filmsAsMainLanguage;
 
-    @OneToMany(mappedBy = "originalLanguage")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "originalLanguage")
     List<Film> filmsAsOriginalLanguage;
 
     @Column(name = "last_update", nullable = false)

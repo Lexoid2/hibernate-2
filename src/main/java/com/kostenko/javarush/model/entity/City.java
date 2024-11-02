@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class City {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id")
     @Setter(AccessLevel.NONE)
     Integer id;
@@ -27,12 +27,13 @@ public class City {
     @NonNull
     String city;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "country_id", nullable = false)
     @NonNull
     Country country;
 
-    @OneToMany(mappedBy = "city")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "city")
     List<Address> addresses;
 
     @Column(name = "last_update", nullable = false)

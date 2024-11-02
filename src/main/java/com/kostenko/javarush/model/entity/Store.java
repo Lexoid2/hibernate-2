@@ -18,28 +18,31 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Store {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
     @Setter(AccessLevel.NONE)
     Short id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "manager_staff_id", nullable = false)
     @NonNull
     Staff mainStaff;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "address_id", nullable = false)
     @NonNull
     Address address;
 
-    @OneToMany(mappedBy = "mainStore")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "mainStore")
     List<Staff> staffList;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "store")
     List<Customer> customers;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "store")
     List<Inventory> inventories;
 
     @Column(name = "last_update", nullable = false)

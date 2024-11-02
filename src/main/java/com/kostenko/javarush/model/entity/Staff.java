@@ -19,7 +19,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Staff {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staff_id")
     @Setter(AccessLevel.NONE)
     Short id;
@@ -32,7 +32,7 @@ public class Staff {
     @NonNull
     String lastName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id", nullable = false)
     @NonNull
     Address address;
@@ -43,18 +43,21 @@ public class Staff {
     @Column(length = 50)
     String email;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "store_id", nullable = false)
     @NonNull
     Store mainStore;
 
-    @OneToMany(mappedBy = "mainStaff")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "mainStaff")
     List<Store> stores;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "staff")
     List<Payment> payments;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
+            mappedBy = "staff")
     List<Rental> rentals;
 
     @Column(name = "active", nullable = false)
